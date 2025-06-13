@@ -1,0 +1,9 @@
+name: SK-CheeseEvts
+main: org.bcdtech.SKCheeseEvts
+version: @version@
+description: @description@
+api-version: 1.21
+author: Blue Cheese Development
+prefix: SK-CheeseEvts
+depend:
+  - Skript

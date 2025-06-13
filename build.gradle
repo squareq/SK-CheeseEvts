@@ -1,0 +1,54 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'org.bcdtech'
+version = '1.0-PROD'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' } //Paper
+    maven { url 'https://repo.skriptlang.org/releases' } // Skript
+}
+
+dependencies {
+    compileOnly('io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT')
+    compileOnly('com.github.SkriptLang:Skript:2.11.2')
+}
+
+tasks.register('release', ProcessResources) {
+    group = 'build'
+    from 'src/main/resources', {
+        include '**'
+        version = project.property('version')
+        def description = 'SK-CheeseEvts adds syntax for creating & listening to custom events.'
+        filter ReplaceTokens, tokens: [
+                'version': version,
+                'description': description,
+        ]
+    }
+    into 'build/resources/main'
+}
+
+tasks.register('server', Copy) {
+    group = 'build'
+    dependsOn build
+    from 'C:\\Users\\cryst\\BCD-Intellij-Workspace\\Projects\\CustomEventsRevamp\\build\\libs'
+    // Change this to wherever you want your jar to build
+    into 'C:\\Users\\cryst\\mcserverupdate\\plugins'
+}
+
+tasks.named('shadowJar', ShadowJar) {
+    group = 'build'
+    dependsOn release
+    archiveFileName = 'SK-CheeseEvts-' + version + '.jar'
+
+}
+
+test {
+    useJUnitPlatform()
+}
