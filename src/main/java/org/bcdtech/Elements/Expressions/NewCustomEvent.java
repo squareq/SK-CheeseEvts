@@ -25,13 +25,13 @@ public class NewCustomEvent extends SimpleExpression<CustomEvent> {
     Integer pattern;
 
     static{
-        Skript.registerExpression(NewCustomEvent.class, CustomEvent.class, ExpressionType.PATTERN_MATCHES_EVERYTHING, "[BCD] [a] new custom event [with id] %string%", "[BCD] [a] new custom event [with id] %string% [and (argument[s]|value[s]) %-objects%]");
+        Skript.registerExpression(NewCustomEvent.class, CustomEvent.class, ExpressionType.COMBINED, "[BCD] [a] new custom event [with id] %string%", "[BCD] [a] new custom event [with id] %string% [and (argument[s]|value[s]) %-objects%]");
     }
     @Override
     protected CustomEvent @Nullable [] get(Event event) {
         CustomEvent customEvent = new CustomEvent(id.getSingle(event));
         if(pattern == 1){
-            customEvent.setEventValues(values.getAll(event));
+            customEvent.setEventValues(values.getAll(event), null);
         }
         return new CustomEvent[] {customEvent};
     }
